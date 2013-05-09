@@ -1,14 +1,17 @@
 package co.admaster.aql;
 
 import co.admaster.aql.exception.AqlException;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.statement.select.FromItem;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * 类SQL语句转换成AqlQuery Bean
- *
+ * <p/>
  * User: chenxiaojian
  * Date: 13-4-27
  * Time: 下午4:25
@@ -27,18 +30,20 @@ public class AqlQueryHandler {
             throw new AqlException("AQL表达式不正确!" + aqlSelectParser.getAqlSelectParserBean().getException());
         }
 
-        String tableStr = aqlSelectParser.getAqlSelectParserBean().getTabName();
-        String conditions = aqlSelectParser.getAqlSelectParserBean().getWhere();
-        String fields = aqlSelectParser.getAqlSelectParserBean().getFromItem();
+        FromItem fromItem = aqlSelectParser.getAqlSelectParserBean().getFromItem();
+        Expression where = aqlSelectParser.getAqlSelectParserBean().getWhere();
+        List selectItems = aqlSelectParser.getAqlSelectParserBean().getSelectItems();
 
-        if (StringUtils.isBlank(tableStr))
+        if (fromItem == null)
             throw new AqlException("缺少table");
 
         //匹配table
 
 
-        if (StringUtils.isBlank(conditions))
+        if (where == null || StringUtils.isBlank(where.toString()))
             throw new AqlException("缺少查询条件");
+
+        String conditions = where.toString();
 
         //查询条件
         TreeMap<String, String> whereMap = new TreeMap<String, String>();
@@ -51,13 +56,13 @@ public class AqlQueryHandler {
             whereMap.put(condsKey, condsValue);
         }
 
-        if (StringUtils.isBlank(fields) || "[*]".equals(fields)) {
+        if (selectItems == null || "[*]".equals(selectItems)) {
             throw new AqlException("缺少查询条件");
         }
 
         System.out.println("打印...");
-        System.out.println("tableStr: " + tableStr);
-        System.out.println("fields: " + fields);
+        System.out.println("fromItem: " + fromItem.toString());
+        System.out.println("selectItems: " + selectItems);
 
         System.out.println("查询条件....");
         for (Map.Entry<String, String> conds : whereMap.entrySet()) {
@@ -66,9 +71,9 @@ public class AqlQueryHandler {
         }
 
         AqlQuery aqlQuery = new AqlQuery();
-        aqlQuery.setTableName(tableStr);
-        aqlQuery.setWhereMap(whereMap);
-        aqlQuery.setFields(fields);
+        aqlQuery.setFromItem(fromItem);
+        aqlQuery.setSelectItems(selectItems);
+        aqlQuery.setWhere(where);
 
         return aqlQuery;
     }
@@ -77,7 +82,7 @@ public class AqlQueryHandler {
     public static void main(String[] args) {
 
         String aql =
-                "SELECT field1,field2,field3,field4 FROM MY_TABLE1 where field1 = value1 and field4 = value4  and order_by=price limit 3";
+                "SELECT field1,field2,field3,field4 FROM MY_TABLE1 where field1 = value1 and field4 = value4  limit 3";
         AqlQueryHandler aqlQuery = new AqlQueryHandler(aql);
 
         AqlQuery aqlGet = null;
@@ -87,7 +92,6 @@ public class AqlQueryHandler {
 
         }
         System.out.println("print aqlGet: \n" + aqlGet.toString());
-
 
     }
 

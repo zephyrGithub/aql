@@ -47,14 +47,14 @@ public class AqlSelectParser {
 //            System.out.println(plainSel.getSelectItems());
 
             if (plainSel.getFromItem() != null)
-                aqlSelectParserBean.setTabName(String.valueOf(plainSel.getFromItem()));
+                aqlSelectParserBean.setFromItem(plainSel.getFromItem());
             if (plainSel.getWhere() != null)
-                aqlSelectParserBean.setWhere(String.valueOf(plainSel.getWhere()));
+                aqlSelectParserBean.setWhere(plainSel.getWhere());
             if (plainSel.getSelectItems() != null)
-                aqlSelectParserBean.setFromItem(String.valueOf(plainSel.getSelectItems()));
+                aqlSelectParserBean.setSelectItems(plainSel.getSelectItems());
             if (plainSel.getLimit() != null)
-                aqlSelectParserBean.setLimit(Long.valueOf(plainSel.getLimit().getRowCount()));
-            System.out.println("aqlSelectParserBean: " + aqlSelectParserBean.toString());
+                aqlSelectParserBean.setLimit(plainSel.getLimit().getRowCount());
+//            System.out.println("aqlSelectParserBean: " + aqlSelectParserBean.toString());
         }
     }
 
@@ -66,11 +66,11 @@ public class AqlSelectParser {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
 //        String sql = "SELECT field1,field2,field3,field4 FROM MY_TABLE1 where field1 = value1 and field4 = value4";
-        String zhongwen = "中文";
+        String zhongwen = "这是中文字符串";
         String sql =
-                "select num,price,type,stuff_status,title,desca,location.state,location.city,cid,props from item  where field1 = " + zhongwen + " and field4 = value4 limit 5";
+                "select num,price,type,stuff_status,title,desp,location.state,location.city,cid,props from item  where field1 = " + zhongwen + " and field4 > value4 or field3< value3  limit 5";
         AqlSelectParser aqlSelectParser = new AqlSelectParser(sql);
-        System.out.println("test it: " + aqlSelectParser.getAqlSelectParserBean());
+        System.out.println("解析之后: " + aqlSelectParser.getAqlSelectParserBean());
     }
 
 

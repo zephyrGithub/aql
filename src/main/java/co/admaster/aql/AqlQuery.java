@@ -1,5 +1,9 @@
 package co.admaster.aql;
 
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.statement.select.FromItem;
+
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -11,36 +15,12 @@ import java.util.TreeMap;
  */
 public class AqlQuery {
 
-    private TreeMap<String, String> whereMap;
-    private String tableName;
-    private String fields;
     private String strApprequest;
+    private FromItem fromItem = null;
+    private Expression where = null;
+    private List selectItems = null;
     private long limit;
 
-
-    public TreeMap<String, String> getWhereMap() {
-        return whereMap;
-    }
-
-    public void setWhereMap(TreeMap<String, String> whereMap) {
-        this.whereMap = whereMap;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public String getFields() {
-        return fields;
-    }
-
-    public void setFields(String fields) {
-        this.fields = fields;
-    }
 
     public String getStrApprequest() {
         return strApprequest;
@@ -58,13 +38,27 @@ public class AqlQuery {
         this.limit = limit;
     }
 
-    @Override
-    public String toString() {
-
-        return "tableName: " + tableName + "\r\n"
-                + "fields: " + fields + "\r\n"
-                + "whereMap: " + whereMap.toString();
+    public List getSelectItems() {
+        return selectItems;
     }
 
+    public void setSelectItems(List selectItems) {
+        this.selectItems = selectItems;
+    }
 
+    public Expression getWhere() {
+        return where;
+    }
+
+    public void setWhere(Expression where) {
+        this.where = where;
+    }
+
+    public FromItem getFromItem() {
+        return fromItem;
+    }
+
+    public void setFromItem(FromItem fromItem) {
+        this.fromItem = fromItem;
+    }
 }

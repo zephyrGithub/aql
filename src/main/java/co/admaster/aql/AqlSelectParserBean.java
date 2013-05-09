@@ -1,5 +1,8 @@
 package co.admaster.aql;
 
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.statement.select.FromItem;
+
 import java.util.List;
 
 /**
@@ -11,11 +14,36 @@ import java.util.List;
  */
 public class AqlSelectParserBean {
 
-    private String tabName = null;
-    private String where = null;
-    private String fromItem = null;
-    private String exception = null;
+    private FromItem fromItem = null;
+    private Expression where = null;
+    private List selectItems = null;
     private long limit;
+    private String exception = null;
+
+
+    public FromItem getFromItem() {
+        return fromItem;
+    }
+
+    public void setFromItem(FromItem fromItem) {
+        this.fromItem = fromItem;
+    }
+
+    public Expression getWhere() {
+        return where;
+    }
+
+    public void setWhere(Expression where) {
+        this.where = where;
+    }
+
+    public List getSelectItems() {
+        return selectItems;
+    }
+
+    public void setSelectItems(List selectItems) {
+        this.selectItems = selectItems;
+    }
 
     public String getException() {
         return exception;
@@ -23,30 +51,6 @@ public class AqlSelectParserBean {
 
     public void setException(String exception) {
         this.exception = exception;
-    }
-
-    public String getTabName() {
-        return tabName;
-    }
-
-    public void setTabName(String tabName) {
-        this.tabName = tabName;
-    }
-
-    public String getWhere() {
-        return where;
-    }
-
-    public void setWhere(String where) {
-        this.where = where;
-    }
-
-    public String getFromItem() {
-        return fromItem;
-    }
-
-    public void setFromItem(String fromItem) {
-        this.fromItem = fromItem;
     }
 
     public long getLimit() {
@@ -57,12 +61,13 @@ public class AqlSelectParserBean {
         this.limit = limit;
     }
 
+
     public String toString() {
-        return new StringBuilder().append("tabName: ").append(getTabName())
+        return new StringBuilder().append("\n").append("fromItem: ").append(getFromItem())
                 .append("\n")
                 .append("where: ").append(getWhere())
                 .append("\n")
-                .append("formItem: ").append(getFromItem())
+                .append("selectItems: ").append(getSelectItems())
                 .append("\n")
                 .append("limit: ").append(getLimit())
                 .append("\n")
